@@ -1,0 +1,11 @@
+{
+  "name": "samuraibs-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Victor Schlindwein",
+  "license": "MIT",
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "cypress": "9.5.0"
+  }
+}
