@@ -1,52 +1,84 @@
 import { faker } from '@faker-js/faker'
 
 describe('Testes de cadastro', () => {
-  it('deve cadastrar um novo usuário', function () {
-    const name = faker.name.fullName()
-    const email = 'luli@rovarova.com'
-    const password = 'pwd123'
 
-    cy.task('removeUser', email)
-      .then(function (result) {
-        console.log(result)
-      })
+  context('dado que o usuário é novo na plataforma', function () {
+    const user = {
+      name: faker.name.fullName(),
+      email: 'luli@rovarova.com',
+      password: 'pwd123'
+    }
 
-    cy.visit('/signup')
+    before(function () {
+      cy.task('removeUser', user.email)
+        .then(function (result) {
+          console.log(result)
+        })
+    })
 
-    cy.get('input[placeholder="Nome"]').type(name)
-    cy.get('input[placeholder="E-mail"]').type('luli@rovarova.com')
-    cy.get('input[placeholder="Senha"]').type(password)
+    it('deve cadastrar um novo usuário', function () {
+      cy.visit('/signup')
 
-    // cy.intercept('POST', '/users', {
-    //   statusCode: 200
-    // }).as('postUser')
+      cy.get('input[placeholder="Nome"]').type(user.name)
+      cy.get('input[placeholder="E-mail"]').type(user.email)
+      cy.get('input[placeholder="Senha"]').type(user.password)
 
-    cy.contains('button[type="submit"]', 'Cadastrar').click()
+      // cy.intercept('POST', '/users', {
+      //   statusCode: 200
+      // }).as('postUser')
 
-    // cy.wait('@postUser')
+      cy.contains('button[type="submit"]', 'Cadastrar').click()
 
-    cy.get('.toast')
-      .should('be.visible')
-      .find('p')
-      .should('have.text', 'Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
+      // cy.wait('@postUser')
+
+      cy.get('.toast')
+        .should('be.visible')
+        .find('p')
+        .should('have.text', 'Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
+    })
   })
 
-  it('deve dar erro de cadastro', function () {
-    const name = faker.name.fullName()
-    const email = 'luli@rovarova.com'
-    const password = 'pwd123'
+  context('dado que o email já existe no banco de dados', function () {
+    const user = {
+      name: 'Voudar Erro',
+      email: 'de@duplicidade.com',
+      password: 'pwd123',
+      is_provider: true,
+    }
 
-    cy.visit('/signup')
+    before(function () {
+      cy.task('removeUser', user.email)
+        .then(function (result) {
+          console.log(result)
+        })
+    })
 
-    cy.get('input[placeholder="Nome"]').type(name)
-    cy.get('input[placeholder="E-mail"]').type(email)
-    cy.get('input[placeholder="Senha"]').type(password)
+    it('deve exibir mensagem de email já cadastrado', function () {
+      cy.task('removeUser', user.email)
+        .then(function (result) {
+          console.log(result)
+        })
 
-    cy.contains('button[type="submit"]', 'Cadastrar').click()
+      cy.request(
+        'POST',
+        'http://localhost:3333/users',
+        user
+      ).then(function (response) {
+        expect(response.status).to.eq(200)
+      })
 
-    cy.get('.toast')
-      .should('be.visible')
-      .find('p')
-      .should('have.text', 'Email já cadastrado para outro usuário.')
+      cy.visit('/signup')
+
+      cy.get('input[placeholder="Nome"]').type(user.name)
+      cy.get('input[placeholder="E-mail"]').type(user.email)
+      cy.get('input[placeholder="Senha"]').type(user.password)
+
+      cy.contains('button[type="submit"]', 'Cadastrar').click()
+
+      cy.get('.toast')
+        .should('be.visible')
+        .find('p')
+        .should('have.text', 'Email já cadastrado para outro usuário.')
+    })
   })
 })
