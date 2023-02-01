@@ -1,50 +1,52 @@
 import { faker } from '@faker-js/faker'
 
-it('deve cadastrar um novo usuário', function () {
-  const name = faker.name.fullName()
-  const email = 'luli@rovarova.com'
-  const password = 'pwd123'
+describe('Testes de cadastro', () => {
+  it('deve cadastrar um novo usuário', function () {
+    const name = faker.name.fullName()
+    const email = 'luli@rovarova.com'
+    const password = 'pwd123'
 
-  cy.task('removeUser', email)
-    .then(function (result) {
-      console.log(result)
-    })
+    cy.task('removeUser', email)
+      .then(function (result) {
+        console.log(result)
+      })
 
-  cy.visit('/signup')
+    cy.visit('/signup')
 
-  cy.get('input[placeholder="Nome"]').type(name)
-  cy.get('input[placeholder="E-mail"]').type('luli@rovarova.com')
-  cy.get('input[placeholder="Senha"]').type(password)
+    cy.get('input[placeholder="Nome"]').type(name)
+    cy.get('input[placeholder="E-mail"]').type('luli@rovarova.com')
+    cy.get('input[placeholder="Senha"]').type(password)
 
-  // cy.intercept('POST', '/users', {
-  //   statusCode: 200
-  // }).as('postUser')
+    // cy.intercept('POST', '/users', {
+    //   statusCode: 200
+    // }).as('postUser')
 
-  cy.contains('button[type="submit"]', 'Cadastrar').click()
+    cy.contains('button[type="submit"]', 'Cadastrar').click()
 
-  // cy.wait('@postUser')
+    // cy.wait('@postUser')
 
-  cy.get('.toast')
-    .should('be.visible')
-    .find('p')
-    .should('have.text', 'Agora você pode fazer seu login no Samurai Barbershop!')
-})
+    cy.get('.toast')
+      .should('be.visible')
+      .find('p')
+      .should('have.text', 'Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
+  })
 
-it('deve dar erro de cadastro', function () {
-  const name = faker.name.fullName()
-  const email = 'luli@rovarova.com'
-  const password = 'pwd123'
+  it('deve dar erro de cadastro', function () {
+    const name = faker.name.fullName()
+    const email = 'luli@rovarova.com'
+    const password = 'pwd123'
 
-  cy.visit('/signup')
+    cy.visit('/signup')
 
-  cy.get('input[placeholder="Nome"]').type(name)
-  cy.get('input[placeholder="E-mail"]').type(email)
-  cy.get('input[placeholder="Senha"]').type(password)
+    cy.get('input[placeholder="Nome"]').type(name)
+    cy.get('input[placeholder="E-mail"]').type(email)
+    cy.get('input[placeholder="Senha"]').type(password)
 
-  cy.contains('button[type="submit"]', 'Cadastrar').click()
+    cy.contains('button[type="submit"]', 'Cadastrar').click()
 
-  cy.get('.toast')
-    .should('be.visible')
-    .find('p')
-    .should('have.text', 'Email já cadastrado para outro usuário.')
+    cy.get('.toast')
+      .should('be.visible')
+      .find('p')
+      .should('have.text', 'Email já cadastrado para outro usuário.')
+  })
 })
