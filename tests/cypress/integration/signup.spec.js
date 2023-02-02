@@ -16,20 +16,20 @@ describe('Testes de cadastro', () => {
         })
     })
 
-    it('deve cadastrar um novo usuário', function () {
+    it('então deve cadastrar um novo usuário', function () {
       cy.visit('/signup')
 
       cy.get('input[placeholder="Nome"]').type(user.name)
       cy.get('input[placeholder="E-mail"]').type(user.email)
       cy.get('input[placeholder="Senha"]').type(user.password)
 
-      // cy.intercept('POST', '/users', {
-      //   statusCode: 200
-      // }).as('postUser')
+      cy.intercept('POST', '/users', {
+        statusCode: 200
+      }).as('postUser')
 
       cy.contains('button[type="submit"]', 'Cadastrar').click()
 
-      // cy.wait('@postUser')
+      cy.wait('@postUser')
 
       cy.get('.toast')
         .should('be.visible')
@@ -53,7 +53,7 @@ describe('Testes de cadastro', () => {
         })
     })
 
-    it('deve exibir mensagem de email já cadastrado', function () {
+    it('então deve exibir mensagem de email já cadastrado', function () {
       cy.task('removeUser', user.email)
         .then(function (result) {
           console.log(result)

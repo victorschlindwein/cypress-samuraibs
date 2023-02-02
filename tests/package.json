@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "Victor Schlindwein",
   "license": "MIT",
+  "scripts":{
+    "test": "npx cypress open"
+  },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "cypress": "9.5.0",
