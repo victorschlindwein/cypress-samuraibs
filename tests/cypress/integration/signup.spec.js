@@ -61,4 +61,73 @@ describe('Testes de cadastro', () => {
       signupPage.toast.shouldHaveText('Email já cadastrado para outro usuário.')
     })
   })
+
+  context('quando o email é incorreto', function () {
+    const user = {
+      name: 'Voudar Erro',
+      email: 'email.formatoinvalido.com',
+      password: 'pwd123'
+    }
+
+    it('deve exibir mensagem de alerta', function () {
+      signupPage.go()
+      signupPage.form(user)
+      signupPage.submit()
+      signupPage.alertHaveText('Informe um email válido')
+    })
+  })
+
+  context('quando a senha é muito curta', function () {
+
+    const passwords = [
+      '1',
+      '12',
+      '12a',
+      '1234',
+      '!2$4#',
+    ]
+
+    beforeEach(function () {
+      signupPage.go()
+    })
+
+    passwords.forEach(function (password) {
+      it(`não deve cadastrar senha com menos de 6 dígitos: ${password}`, function () {
+
+        const user = {
+          name: "Carlos Minimalista",
+          email: "cm@mail.com",
+          password
+        }
+
+        signupPage.form(user)
+        signupPage.submit()
+      })
+    })
+
+    afterEach(function () {
+      signupPage.alertHaveText('Pelo menos 6 caracteres')
+    })
+
+  })
+
+  context('quando não é enviado nenhum dado', function () {
+
+    const alertMessages = [
+      'Nome é obrigatório',
+      'E-mail é obrigatório',
+      'Senha é obrigatória',
+    ]
+
+    before(function () {
+      signupPage.go()
+      signupPage.submit()
+    })
+
+    alertMessages.forEach(function (alertMessage) {
+      it('deve exibir mensagem ' + alertMessage.toLocaleLowerCase(), function () {
+        signupPage.alertHaveText(alertMessage)
+      })
+    })
+  })
 })
