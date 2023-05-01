@@ -1,3 +1,3 @@
 exports.el = {
-  toast: '.toast'
+    toast: '.toast'
 }

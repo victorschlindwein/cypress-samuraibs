@@ -1,133 +1,94 @@
-import { faker } from '@faker-js/faker'
 
-import signupPage from '../support/pages/signup/index'
+import signupPage from '../support/pages/signup'
 
-describe('Testes de cadastro', () => {
-  context('dado que o usuário é novo na plataforma', function () {
-    const user = {
-      name: faker.name.fullName(),
-      email: 'luli@rovarova.com',
-      password: 'pwd123'
-    }
+describe('cadastro', function () {
 
-    before(function () {
-      cy.task('removeUser', user.email)
-        .then(function (result) {
-          console.log(result)
+    before(function(){
+        cy.fixture('signup').then(function(signup){
+            this.success = signup.success
+            this.email_dup = signup.email_dup
+            this.email_inv =  signup.email_inv
+            this.short_password = signup.short_password
         })
     })
 
-    it('deve cadastrar um novo usuário', function () {
-      signupPage.go()
-      signupPage.form(user)
-      signupPage.submit()
-      signupPage.toast.shouldHaveText('Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
+    context('quando o usuário é novato', function () {
+        before(function () {
+            cy.task('removeUser', this.success.email)
+                .then(function (result) {
+                    console.log(result)
+                })
+        })
 
-    })
-  })
-
-  context('dado que o email já existe no banco de dados', function () {
-    const user = {
-      name: 'Voudar Erro',
-      email: 'de@duplicidade.com',
-      password: 'pwd123',
-      is_provider: true,
-    }
-
-    before(function () {
-      cy.task('removeUser', user.email)
-        .then(function (result) {
-          console.log(result)
+        it('deve cadastrar com sucesso', function () {
+            signupPage.go()
+            signupPage.form(this.success)
+            signupPage.submit()
+            signupPage.toast.shouldHaveText('Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
         })
     })
 
-    it('então deve exibir mensagem de email já cadastrado', function () {
-      cy.task('removeUser', user.email)
-        .then(function (result) {
-          console.log(result)
+    context('quando o email já existe', function () {
+        before(function () {
+            cy.postUser(this.email_dup)
         })
 
-      cy.request(
-        'POST',
-        'http://localhost:3333/users',
-        user
-      ).then(function (response) {
-        expect(response.status).to.eq(200)
-      })
+        it('não deve cadastrar o usuário', function () {
+            signupPage.go()
+            signupPage.form(this.email_dup)
+            signupPage.submit()
+            signupPage.toast.shouldHaveText('Email já cadastrado para outro usuário.')
+        })
 
-      signupPage.go()
-      signupPage.form(user)
-      signupPage.submit()
-      signupPage.toast.shouldHaveText('Email já cadastrado para outro usuário.')
-    })
-  })
-
-  context('quando o email é incorreto', function () {
-    const user = {
-      name: 'Voudar Erro',
-      email: 'email.formatoinvalido.com',
-      password: 'pwd123'
-    }
-
-    it('deve exibir mensagem de alerta', function () {
-      signupPage.go()
-      signupPage.form(user)
-      signupPage.submit()
-      signupPage.alertHaveText('Informe um email válido')
-    })
-  })
-
-  context('quando a senha é muito curta', function () {
-
-    const passwords = [
-      '1',
-      '12',
-      '12a',
-      '1234',
-      '!2$4#',
-    ]
-
-    beforeEach(function () {
-      signupPage.go()
     })
 
-    passwords.forEach(function (password) {
-      it(`não deve cadastrar senha com menos de 6 dígitos: ${password}`, function () {
+    context('quando o email é incorreto', function () {
 
-        const user = {
-          name: "Carlos Minimalista",
-          email: "cm@mail.com",
-          password
-        }
-
-        signupPage.form(user)
-        signupPage.submit()
-      })
+        it('deve exibir mensagem de alerta', function () {
+            signupPage.go()
+            signupPage.form(this.email_inv)
+            signupPage.submit()
+            signupPage.alert.haveText('Informe um email válido')
+        })
     })
 
-    afterEach(function () {
-      signupPage.alertHaveText('Pelo menos 6 caracteres')
+    context('quando a senha é muito curta', function () {
+
+        const passwords = ['1', '2a', 'ab3', 'abc4', 'ab#c5']
+
+        passwords.forEach(function (p) {
+            it('não deve cadastrar com a senha: ' + p, function () {
+                
+                this.short_password.password = p
+
+                signupPage.go()
+                signupPage.form(this.short_password)
+                signupPage.submit()
+            })
+        })
+
+        afterEach(function () {
+            signupPage.alert.haveText('Pelo menos 6 caracteres')
+        })
     })
 
-  })
+    context('quando não preencho nenhum dos campos', function(){
+        const alertMessages = [
+            'Nome é obrigatório',
+            'E-mail é obrigatório',
+            'Senha é obrigatória'
+        ]
 
-  context('quando não é enviado nenhum dado', function () {
+        before(function(){
+            signupPage.go()
+            signupPage.submit()
+        })
 
-    const alertMessages = [
-      'Nome é obrigatório',
-      'E-mail é obrigatório',
-      'Senha é obrigatória',
-    ]
-
-    before(function () {
-      signupPage.go()
-      signupPage.submit()
+        alertMessages.forEach(function(alert){
+            it('deve exibir ' + alert.toLowerCase(), function(){
+                signupPage.alert.haveText(alert)
+            })
+        })
     })
-
-    alertMessages.forEach(function (alertMessage) {
-      it('deve exibir mensagem ' + alertMessage.toLocaleLowerCase(), function () {
-        signupPage.alertHaveText(alertMessage)
-      })
-    })
-  })
 })
+

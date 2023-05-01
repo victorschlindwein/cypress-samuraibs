@@ -1,15 +1,15 @@
 {
   "name": "samuraibs-tests",
   "version": "1.0.0",
+  "description": "Projeto de testes de aceitação de ponta a ponta em Cypress",
   "main": "index.js",
-  "author": "Victor Schlindwein",
+  "author": "Fernando Papito",
   "license": "MIT",
-  "scripts":{
-    "test": "npx cypress open"
-  },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
-    "cypress": "9.5.0",
-    "pg": "^8.9.0"
+    "@faker-js/faker": "^6.0.0-alpha.7",
+    "cypress": "^9.5.0",
+    "moment": "^2.29.1",
+    "pg": "^8.7.3",
+    "underscore": "^1.13.2"
   }
 }

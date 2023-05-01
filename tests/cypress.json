@@ -1,12 +1,14 @@
 {
-  "baseUrl": "http://localhost:3000",
-  "viewportWidth": 1440,
-  "viewportHeight": 900,
-  "dbConfig": {
-    "host": "tuffi.db.elephantsql.com",
-    "user": "urjqzmxi",
-    "password": "YWLMKikJZhGIg0Y03dIEPDp8UcGuFXiY",
-    "database": "urjqzmxi",
-    "port": 5432
-  }
+	"baseUrl": "https://samuraibs-web-papito.herokuapp.com",
+	"apiServer": "https://samuraibs-api-papito.herokuapp.com",
+	"viewportWidth": 1440,
+	"viewportHeight": 900,
+	"defaultCommandTimeout": 30000,
+	"dbConfig": {
+		"host": "tuffi.db.elephantsql.com",
+		"user": "urjqzmxi",
+		"password": "YWLMKikJZhGIg0Y03dIEPDp8UcGuFXiY",
+		"database": "urjqzmxi",
+		"port": 5432
+	}
 }
