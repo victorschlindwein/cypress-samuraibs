@@ -27,8 +27,8 @@ let EtherealMailProvider = (_dec = (0, _tsyringe.injectable)(), _dec2 = function
         host: 'smtp.ethereal.email',
         port: 587,
         auth: {
-          user: 'deondre.larkin82@ethereal.email',
-          pass: 'Bd5tjCZbMQ3bVC9VmT'
+          user: 'cassidy.romaguera19@ethereal.email',
+          pass: 'as9qSN5H4g1uGv5U7j'
         }
       });
 
