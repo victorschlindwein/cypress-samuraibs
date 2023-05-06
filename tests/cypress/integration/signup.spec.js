@@ -73,12 +73,11 @@ describe('Testes de cadastro', () => {
       signupPage.go()
       signupPage.form(user)
       signupPage.submit()
-      signupPage.alertHaveText('Informe um email válido')
+      signupPage.alert.haveText('Informe um email válido')
     })
   })
 
   context('quando a senha é muito curta', function () {
-
     const passwords = [
       '1',
       '12',
@@ -93,7 +92,6 @@ describe('Testes de cadastro', () => {
 
     passwords.forEach(function (password) {
       it(`não deve cadastrar senha com menos de 6 dígitos: ${password}`, function () {
-
         const user = {
           name: "Carlos Minimalista",
           email: "cm@mail.com",
@@ -106,13 +104,12 @@ describe('Testes de cadastro', () => {
     })
 
     afterEach(function () {
-      signupPage.alertHaveText('Pelo menos 6 caracteres')
+      signupPage.alert.haveText('Pelo menos 6 caracteres')
     })
 
   })
 
-  context('quando não é enviado nenhum dado', function () {
-
+  context('quando não é preenchido nenhum dado', function () {
     const alertMessages = [
       'Nome é obrigatório',
       'E-mail é obrigatório',
@@ -126,7 +123,7 @@ describe('Testes de cadastro', () => {
 
     alertMessages.forEach(function (alertMessage) {
       it('deve exibir mensagem ' + alertMessage.toLocaleLowerCase(), function () {
-        signupPage.alertHaveText(alertMessage)
+        signupPage.alert.haveText(alertMessage)
       })
     })
   })

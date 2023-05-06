@@ -1,5 +1,5 @@
 import { el } from './elements'
-import header from "../../components/toast/header"
+import header from "../../components/header"
 
 class DashPage {
 
