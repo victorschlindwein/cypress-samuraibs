@@ -24,7 +24,6 @@ describe('Testes de cadastro', () => {
       signupPage.form(this.sucess)
       signupPage.submit()
       signupPage.toast.shouldHaveText('Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
-
     })
   })
 
@@ -88,7 +87,7 @@ describe('Testes de cadastro', () => {
     })
 
     alertMessages.forEach(function (alertMessage) {
-      it('então deve exibir mensagem ' + alertMessage.toLocaleLowerCase(), function () {
+      it(`então deve exibir mensagem ${alertMessage.toLocaleLowerCase()}`, function () {
         signupPage.alert.haveText(alertMessage)
       })
     })

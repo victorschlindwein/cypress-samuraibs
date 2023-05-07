@@ -19,5 +19,10 @@
 		"name": "Carlos Minimalista",
 		"email": "cm@mail.com",
 		"password": null
+	},
+	"lost_password": {
+		"name": "Eduardo Esquecedor de Senha",
+		"email": "naolembroasenha@eduardo.com",
+		"password": "naovoulembrar"
 	}
 }
