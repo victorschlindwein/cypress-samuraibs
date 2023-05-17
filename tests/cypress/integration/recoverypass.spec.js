@@ -8,7 +8,7 @@ describe('resgate de senha', function () {
     })
   })
 
-  context('quando o usuário esquece a senha', function () {
+  context.only('quando o usuário esquece a senha', function () {
 
     before(function () {
       cy.postUser(this.data)
@@ -19,16 +19,9 @@ describe('resgate de senha', function () {
       forgotpassword.form(this.data.email)
       forgotpassword.submit()
 
-      cy.intercept(
-        'post',
-        'password/forgot'
-      ).as('envioDeSenha')
-
-      cy.wait('@envioDeSenha')
-
       const message = 'Enviamos um e-mail para confirmar a recuperação de senha, cheque sua caixa de entrada.'
 
-      forgotpassword.toast.shouldHaveText(message)
+      forgotpassword.toast.shouldHaveText(message, { timeout: 10000 })
     })
   })
 

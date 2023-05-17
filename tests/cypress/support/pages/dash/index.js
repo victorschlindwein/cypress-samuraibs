@@ -12,20 +12,16 @@ class DashPage {
   }
 
   selectDay(day) {
-    // legenda regex:
-    // ^ => começa com
-    // $ => acaba
-    // g => modificador global
-
+    //RegExp | ^ começa com | $ acaba com | g modificador global
     const target = new RegExp('^' + day + '$', 'g')
-    cy.contains(el.dia, target).click()
+    cy.contains(el.boxDay, target).click()
   }
 
   appointmentShouldBe(customer, hour) {
     cy.contains('div', customer.name)
       .should('be.visible')
       .parent()
-      .contains('span[class="appointment"]', hour)
+      .contains(el.boxHour, hour)
       .should('be.visible')
   }
 }
