@@ -26,7 +26,18 @@
 
 import moment from 'moment'
 
+
 import { apiServer } from '../../cypress.json'
+
+import loginPage from './pages/login'
+import dashPage from './pages/dash'
+
+Cypress.Commands.add('uiLogin', function (user) {
+  loginPage.go()
+  loginPage.form(user)
+  loginPage.submit()
+  dashPage.header.userLoggedIn(user.name)
+})
 
 Cypress.Commands.add('postUser', function (user) {
   cy.task('removeUser', user.email)
@@ -38,8 +49,7 @@ Cypress.Commands.add('postUser', function (user) {
     method: 'POST',
     url: apiServer + '/users',
     body: user
-  }
-  ).then(function (response) {
+  }).then(function (response) {
     expect(response.status).to.eq(200)
   })
 })
@@ -49,8 +59,7 @@ Cypress.Commands.add('recoveryPass', function (email) {
     method: 'POST',
     url: apiServer + '/password/forgot',
     body: { email }
-  }
-  ).then(function (response) {
+  }).then(function (response) {
     expect(response.status).to.eq(204)
 
     cy.task('findToken', email)
@@ -104,7 +113,7 @@ Cypress.Commands.add('setProviderId', function (providerEmail) {
   })
 })
 
-Cypress.Commands.add('apiLogin', function (user) {
+Cypress.Commands.add('apiLogin', function (user, setLocalStorage = false) {
   const payload = {
     email: user.email,
     password: user.password
@@ -117,5 +126,16 @@ Cypress.Commands.add('apiLogin', function (user) {
   }).then(function (response) {
     expect(response.status).to.eq(200)
     Cypress.env('apiToken', response.body.token)
+
+    const { token, user } = response.body
+
+    if (setLocalStorage) {
+      window.localStorage.setItem('@Samurai:token', token)
+      window.localStorage.setItem('@Samurai:user', JSON.stringify(user))
+    }
   })
+
+  if (setLocalStorage) {
+    cy.visit('/dashboard')
+  }
 })
