@@ -26,7 +26,6 @@
 
 import moment from 'moment'
 
-
 import { apiServer } from '../../cypress.json'
 
 import loginPage from './pages/login'

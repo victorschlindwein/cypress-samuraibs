@@ -9,6 +9,7 @@ class ResetPassPage {
 
   go(token) {
     cy.visit('http://localhost:3000/reset-password?token=' + token)
+    cy.contains(el.title).should('be.visible')
   }
 
   form(newPass) {
