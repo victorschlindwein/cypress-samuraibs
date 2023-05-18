@@ -63,9 +63,6 @@ class DashPage {
         .should('be.visible')
     }
 
-    cy.log(today.toString())
-    cy.log(lastDayOfMonth.toString())
-
     //RegExp | ^ começa com | $ acaba com | g modificador global
     const target = new RegExp('^' + appointmentDate.getDate() + '$', 'g')
     cy.contains(el.boxDay, target)
