@@ -117,7 +117,6 @@ Cypress.Commands.add('apiLogin', function (user, setLocalStorage = false) {
     email: user.email,
     password: user.password
   }
-
   cy.request({
     method: 'POST',
     url: apiServer + '/sessions',
@@ -126,15 +125,13 @@ Cypress.Commands.add('apiLogin', function (user, setLocalStorage = false) {
     expect(response.status).to.eq(200)
     Cypress.env('apiToken', response.body.token)
 
-    const { token, user } = response.body
-
     if (setLocalStorage) {
+      const { token, user } = response.body
+
       window.localStorage.setItem('@Samurai:token', token)
       window.localStorage.setItem('@Samurai:user', JSON.stringify(user))
     }
   })
 
-  if (setLocalStorage) {
-    cy.visit('/dashboard')
-  }
+  if (setLocalStorage) cy.visit('/dashboard')
 })
