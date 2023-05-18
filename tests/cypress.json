@@ -1,12 +1,13 @@
 {
-  "baseUrl": "http://localhost:3000",
-  "viewportWidth": 1440,
-  "viewportHeight": 900,
-  "dbConfig": {
-    "host": "tuffi.db.elephantsql.com",
-    "user": "urjqzmxi",
-    "password": "YWLMKikJZhGIg0Y03dIEPDp8UcGuFXiY",
-    "database": "urjqzmxi",
-    "port": 5432
-  }
+	"baseUrl": "http://localhost:3000",
+	"apiServer": "http://localhost:3333",
+	"viewportWidth": 1440,
+	"viewportHeight": 900,
+	"dbConfig": {
+		"host": "tuffi.db.elephantsql.com",
+		"user": "urjqzmxi",
+		"password": "YWLMKikJZhGIg0Y03dIEPDp8UcGuFXiY",
+		"database": "urjqzmxi",
+		"port": 5432
+	}
 }
